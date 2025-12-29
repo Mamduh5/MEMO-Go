@@ -1,12 +1,14 @@
 package app
 
 import (
-	"context"
-	"fmt"
-
 	"memo-go/services/auth/internal/config"
 	dbMysql "memo-go/services/auth/internal/infrastructure/db/mysql"
 	repoMysql "memo-go/services/auth/internal/infrastructure/repository/mysql"
+	bcryptHasher "memo-go/services/auth/internal/infrastructure/security/bcrypt"
+	"memo-go/services/auth/internal/usecase/auth"
+	"time"
+
+	jwtToken "memo-go/services/auth/internal/infrastructure/token/jwt"
 )
 
 func NewApp() error {
@@ -26,11 +28,22 @@ func NewApp() error {
 	if err := dbMysql.Migrate(db); err != nil {
 		return err
 	}
+
 	userRepo := repoMysql.NewUserRepository(db)
+	tokenRepo := repoMysql.NewRefreshTokenRepository(db)
+	hasher := bcryptHasher.New(0)
 
-	ctx := context.Background()
-	user, err := userRepo.FindByEmail(ctx, "test@example.com")
-	fmt.Println(user, err)
+	tokenGen := jwtToken.New(
+		"dev-secret-change-later",
+		15*time.Minute,
+	)
 
-	return nil
+	authUC := auth.NewAuthUsecase(
+		userRepo,
+		tokenRepo,
+		hasher,
+		tokenGen,
+	)
+
+	return StartGRPCServer(authUC)
 }

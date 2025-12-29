@@ -21,7 +21,7 @@ func Load() *Config {
 		MySQL: MySQLConfig{
 			User:     getEnv("MYSQL_USER", "root"),
 			Password: getEnv("MYSQL_PASSWORD", "password"),
-			Host:     getEnv("MYSQL_HOST", "mysql"),
+			Host:     getEnv("MYSQL_HOST", "127.0.0.1"),
 			Port:     getEnv("MYSQL_PORT", "3306"),
 			DBName:   getEnv("MYSQL_DB", "memo_auth"),
 		},

@@ -14,11 +14,6 @@ type RefreshTokenRepository interface {
 	Revoke(ctx context.Context, tokenID string) error
 }
 
-type PasswordHasher interface {
-	Hash(password string) (string, error)
-	Compare(hash, password string) error
-}
-
 type TokenGenerator interface {
 	GenerateAccessToken(userID string) (string, error)
 	GenerateRefreshToken() (string, error)
