@@ -81,3 +81,15 @@ func (h *AuthHandler) Refresh(
 		RefreshToken: refresh,
 	}, nil
 }
+
+func (h *AuthHandler) Logout(
+	ctx context.Context,
+	req *authv1.LogoutRequest,
+) (*authv1.LogoutResponse, error) {
+
+	if err := h.authUC.Logout(ctx, req.UserId); err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &authv1.LogoutResponse{}, nil
+}

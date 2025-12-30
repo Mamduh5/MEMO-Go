@@ -3,6 +3,7 @@ package app
 import (
 	"net"
 
+	"memo-go/services/auth/internal/config"
 	authGrpc "memo-go/services/auth/internal/interface/transport/grpc"
 	authv1 "memo-go/shared/gen/auth/v1"
 
@@ -13,10 +14,11 @@ import (
 )
 
 func StartGRPCServer(
+	cfg *config.Config,
 	authUC *auth.AuthUsecase,
 ) error {
 
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", ":"+cfg.Server.GRPCPort)
 	if err != nil {
 		return err
 	}

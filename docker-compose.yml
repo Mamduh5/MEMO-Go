@@ -30,6 +30,11 @@ services:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
       MYSQL_DB: memo_auth
+
+      JWT_SECRET: super-secret-dev-key
+      JWT_ACCESS_TTL_MIN: 15
+      JWT_REFRESH_TTL_HOUR: 168
+      GRPC_PORT: 50051
     ports:
       - "50051:50051"
 

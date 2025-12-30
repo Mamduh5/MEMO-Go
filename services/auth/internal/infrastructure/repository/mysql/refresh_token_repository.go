@@ -90,3 +90,18 @@ WHERE id = ?
 	_, err := r.db.ExecContext(ctx, query, tokenID)
 	return err
 }
+
+func (r *RefreshTokenRepository) RevokeAllByUser(
+	ctx context.Context,
+	userID string,
+) error {
+
+	const query = `
+UPDATE refresh_tokens
+SET revoked = true
+WHERE user_id = ? AND revoked = false
+`
+
+	_, err := r.db.ExecContext(ctx, query, userID)
+	return err
+}

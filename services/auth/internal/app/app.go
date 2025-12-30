@@ -6,7 +6,6 @@ import (
 	repoMysql "memo-go/services/auth/internal/infrastructure/repository/mysql"
 	bcryptHasher "memo-go/services/auth/internal/infrastructure/security/bcrypt"
 	"memo-go/services/auth/internal/usecase/auth"
-	"time"
 
 	jwtToken "memo-go/services/auth/internal/infrastructure/token/jwt"
 )
@@ -34,8 +33,8 @@ func NewApp() error {
 	hasher := bcryptHasher.New(0)
 
 	tokenGen := jwtToken.New(
-		"dev-secret-change-later",
-		15*time.Minute,
+		cfg.JWT.Secret,
+		cfg.JWT.AccessTokenTTL,
 	)
 
 	authUC := auth.NewAuthUsecase(
@@ -43,7 +42,8 @@ func NewApp() error {
 		tokenRepo,
 		hasher,
 		tokenGen,
+		cfg.JWT.RefreshTokenTTL,
 	)
 
-	return StartGRPCServer(authUC)
+	return StartGRPCServer(cfg, authUC)
 }

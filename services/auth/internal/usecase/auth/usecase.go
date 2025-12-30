@@ -1,12 +1,16 @@
 package auth
 
-import "memo-go/services/auth/internal/domain"
+import (
+	"memo-go/services/auth/internal/domain"
+	"time"
+)
 
 type AuthUsecase struct {
-	userRepo  domain.UserRepository
-	tokenRepo domain.RefreshTokenRepository
-	hasher    domain.PasswordHasher
-	tokenGen  domain.TokenGenerator
+	userRepo   domain.UserRepository
+	tokenRepo  domain.RefreshTokenRepository
+	hasher     domain.PasswordHasher
+	tokenGen   domain.TokenGenerator
+	refreshTTL time.Duration
 }
 
 func NewAuthUsecase(
@@ -14,11 +18,13 @@ func NewAuthUsecase(
 	tokenRepo domain.RefreshTokenRepository,
 	hasher domain.PasswordHasher,
 	tokenGen domain.TokenGenerator,
+	refreshTTL time.Duration,
 ) *AuthUsecase {
 	return &AuthUsecase{
-		userRepo:  userRepo,
-		tokenRepo: tokenRepo,
-		hasher:    hasher,
-		tokenGen:  tokenGen,
+		userRepo:   userRepo,
+		tokenRepo:  tokenRepo,
+		hasher:     hasher,
+		tokenGen:   tokenGen,
+		refreshTTL: refreshTTL,
 	}
 }

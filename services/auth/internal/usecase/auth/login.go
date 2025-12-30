@@ -49,7 +49,7 @@ func (u *AuthUsecase) Login(
 		ID:        uuid.NewString(),
 		UserID:    user.ID,
 		Token:     refreshToken,
-		ExpiresAt: time.Now().Add(7 * 24 * time.Hour),
+		ExpiresAt: time.Now().Add(u.refreshTTL),
 		Revoked:   false,
 	}
 
