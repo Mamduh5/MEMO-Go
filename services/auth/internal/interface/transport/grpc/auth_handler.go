@@ -60,3 +60,24 @@ func (h *AuthHandler) Register(
 
 	return &authv1.RegisterResponse{}, nil
 }
+
+func (h *AuthHandler) Refresh(
+	ctx context.Context,
+	req *authv1.RefreshRequest,
+) (*authv1.LoginResponse, error) {
+
+	access, refresh, err := h.authUC.Refresh(ctx, req.RefreshToken)
+	if err != nil {
+		switch err {
+		case auth.ErrInvalidRefreshToken:
+			return nil, status.Error(codes.Unauthenticated, err.Error())
+		default:
+			return nil, status.Error(codes.Internal, err.Error())
+		}
+	}
+
+	return &authv1.LoginResponse{
+		AccessToken:  access,
+		RefreshToken: refresh,
+	}, nil
+}
