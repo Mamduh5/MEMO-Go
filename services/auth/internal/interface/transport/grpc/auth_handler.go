@@ -19,6 +19,11 @@ func NewAuthHandler(uc *auth.AuthUsecase) *AuthHandler {
 	return &AuthHandler{authUC: uc}
 }
 
+func UserIDFromContext(ctx context.Context) (string, bool) {
+	userID, ok := ctx.Value(UserIDContextKey).(string)
+	return userID, ok
+}
+
 func (h *AuthHandler) Login(
 	ctx context.Context,
 	req *authv1.LoginRequest,
@@ -87,8 +92,13 @@ func (h *AuthHandler) Logout(
 	req *authv1.LogoutRequest,
 ) (*authv1.LogoutResponse, error) {
 
-	if err := h.authUC.Logout(ctx, req.UserId); err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+	userID, ok := UserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "missing user context")
+	}
+
+	if err := h.authUC.Logout(ctx, userID); err != nil {
+		return nil, err
 	}
 
 	return &authv1.LogoutResponse{}, nil

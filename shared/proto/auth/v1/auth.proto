@@ -32,8 +32,6 @@ message RefreshRequest {
   string refresh_token = 1;
 }
 
-message LogoutRequest {
-  string user_id = 1;
-}
+message LogoutRequest {}
 
 message LogoutResponse {}
