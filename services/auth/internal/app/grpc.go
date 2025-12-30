@@ -7,6 +7,7 @@ import (
 	authGrpc "memo-go/services/auth/internal/interface/transport/grpc"
 	authv1 "memo-go/shared/gen/auth/v1"
 
+	authgrpc "memo-go/services/auth/internal/interface/transport/grpc"
 	"memo-go/services/auth/internal/usecase/auth"
 
 	"google.golang.org/grpc"
@@ -23,7 +24,11 @@ func StartGRPCServer(
 		return err
 	}
 
-	server := grpc.NewServer()
+	server := grpc.NewServer(
+		grpc.UnaryInterceptor(
+			authgrpc.JWTUnaryInterceptor([]byte(cfg.JWT.Secret)),
+		),
+	)
 
 	reflection.Register(server)
 	authv1.RegisterAuthServiceServer(
