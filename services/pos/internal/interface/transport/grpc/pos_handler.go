@@ -17,10 +17,10 @@ import (
 type PosHandler struct {
 	posv1.UnimplementedPosServiceServer
 	authClient authv1.AuthServiceClient
-	uc         *posuc.Usecase
+	uc         *posuc.PosUsecase
 }
 
-func NewPosHandler(authClient authv1.AuthServiceClient, uc *posuc.Usecase) *PosHandler {
+func NewPosHandler(authClient authv1.AuthServiceClient, uc *posuc.PosUsecase) *PosHandler {
 	return &PosHandler{
 		authClient: authClient,
 		uc:         uc,
@@ -87,4 +87,44 @@ func (h *PosHandler) OpenShift(
 		ShiftId:  res.ShiftID,
 		OpenedAt: res.OpenedAt.Format(time.RFC3339),
 	}, nil
+}
+
+func (h *PosHandler) CloseShift(
+	ctx context.Context,
+	_ *posv1.CloseShiftRequest,
+) (*posv1.CloseShiftResponse, error) {
+
+	userID, ok := UserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "missing user context")
+	}
+
+	if err := h.uc.CloseShift(ctx, userID); err != nil {
+		switch err {
+		case posuc.ErrNoOpenShift:
+			return nil, status.Error(codes.FailedPrecondition, err.Error())
+		default:
+			return nil, err
+		}
+	}
+
+	return &posv1.CloseShiftResponse{}, nil
+}
+
+func (h *PosHandler) CreateOrder(
+	ctx context.Context,
+	_ *posv1.CreateOrderRequest,
+) (*posv1.CreateOrderResponse, error) {
+
+	userID, ok := UserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "missing user context")
+	}
+
+	orderID, err := h.uc.CreateOrder(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &posv1.CreateOrderResponse{OrderId: orderID}, nil
 }

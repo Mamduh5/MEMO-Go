@@ -1,7 +1,15 @@
 package pos
 
-type Usecase struct{}
+import "memo-go/services/pos/internal/domain"
 
-func New() *Usecase {
-	return &Usecase{}
+type PosUsecase struct {
+	shiftRepo domain.ShiftRepository
+	orderRepo domain.OrderRepository
+	itemRepo  domain.OrderItemRepository
+}
+
+func NewPosUsecase(shiftRepo domain.ShiftRepository) *PosUsecase {
+	return &PosUsecase{
+		shiftRepo: shiftRepo,
+	}
 }

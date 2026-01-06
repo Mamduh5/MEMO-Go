@@ -4,7 +4,6 @@ import (
 	"net"
 
 	"memo-go/services/auth/internal/config"
-	authGrpc "memo-go/services/auth/internal/interface/transport/grpc"
 	authv1 "memo-go/shared/gen/auth/v1"
 
 	authgrpc "memo-go/services/auth/internal/interface/transport/grpc"
@@ -33,7 +32,7 @@ func StartGRPCServer(
 	reflection.Register(server)
 	authv1.RegisterAuthServiceServer(
 		server,
-		authGrpc.NewAuthHandler(authUC),
+		authgrpc.NewAuthHandler(authUC),
 	)
 
 	return server.Serve(lis)

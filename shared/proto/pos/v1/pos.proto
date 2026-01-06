@@ -8,6 +8,9 @@ service PosService {
   rpc Ping(PingRequest) returns (PingResponse);
   rpc Logout(LogoutRequest) returns (LogoutResponse);
   rpc OpenShift(OpenShiftRequest) returns (OpenShiftResponse);
+  rpc CloseShift(CloseShiftRequest) returns (CloseShiftResponse);
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+  rpc AddOrderItem(AddOrderItemRequest) returns (AddOrderItemResponse);
 }
 
 message PingRequest {}
@@ -27,3 +30,22 @@ message OpenShiftResponse {
   string shift_id  = 1;
   string opened_at = 2;
 }
+
+message CloseShiftRequest {}
+
+message CloseShiftResponse {}
+
+message CreateOrderRequest {}
+
+message CreateOrderResponse {
+  string order_id = 1;
+}
+
+message AddOrderItemRequest {
+  string order_id = 1;
+  string name     = 2;
+  int64  price    = 3;
+  int32  quantity = 4;
+}
+
+message AddOrderItemResponse {}
