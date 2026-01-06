@@ -34,9 +34,30 @@ services:
       JWT_SECRET: super-secret-dev-key
       JWT_ACCESS_TTL_MIN: 15
       JWT_REFRESH_TTL_HOUR: 168
-      GRPC_PORT: 50051
+      AUTH_GRPC_ADDR: 50051
     ports:
       - "50051:50051"
+  pos:
+    build:
+      context: .
+      dockerfile: services/pos/Dockerfile
+    container_name: memo-pos
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      AUTH_GRPC_ADDR: auth:50051
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DB: memo_pos
 
+      JWT_SECRET: super-secret-dev-key
+      JWT_ACCESS_TTL_MIN: 15
+      JWT_REFRESH_TTL_HOUR: 168
+      POS_GRPC_PORT: 50052
+    ports:
+      - "50052:50052"
 volumes:
   mysql_data:

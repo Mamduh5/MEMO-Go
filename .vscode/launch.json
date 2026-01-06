@@ -1,0 +1,46 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Auth Service",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/services/auth/cmd/authd",
+      "env": {
+        "MYSQL_USER": "root",
+        "MYSQL_PASSWORD": "password",
+        "MYSQL_HOST": "127.0.0.1",
+        "MYSQL_PORT": "3306",
+        "MYSQL_DB": "memo_auth",
+
+        "JWT_SECRET": "super-secret-dev-key",
+        "JWT_ACCESS_TTL_MIN": "15",
+        "JWT_REFRESH_TTL_HOUR": "168",
+
+        "AUTH_GRPC_ADDR": "50051"
+      }
+    },
+    {
+      "name": "Debug POS Service",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/services/pos/cmd/posd",
+      "env": {
+        "MYSQL_USER": "root",
+        "MYSQL_PASSWORD": "password",
+        "MYSQL_HOST": "127.0.0.1",
+        "MYSQL_PORT": "3306",
+        "MYSQL_DB": "memo_pos",
+
+        "JWT_SECRET": "super-secret-dev-key",
+        "JWT_ACCESS_TTL_MIN": "15",
+        "JWT_REFRESH_TTL_HOUR": "168",
+
+        "AUTH_GRPC_ADDR": "127.0.0.1:50051",
+        "POS_GRPC_PORT": "50052"
+      }
+    }
+  ]
+}

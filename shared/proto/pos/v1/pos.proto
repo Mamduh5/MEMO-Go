@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package pos.v1;
+
+option go_package = "pos/v1;posv1";
+
+service PosService {
+  rpc Ping(PingRequest) returns (PingResponse);
+  rpc Logout(LogoutRequest) returns (LogoutResponse);
+  rpc OpenShift(OpenShiftRequest) returns (OpenShiftResponse);
+}
+
+message PingRequest {}
+
+message PingResponse {
+  string user_id = 1;
+  string message = 2;
+}
+
+message LogoutRequest {}
+
+message LogoutResponse {}
+
+message OpenShiftRequest {}
+
+message OpenShiftResponse {
+  string shift_id  = 1;
+  string opened_at = 2;
+}

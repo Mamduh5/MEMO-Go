@@ -19,7 +19,7 @@ func StartGRPCServer(
 	authUC *auth.AuthUsecase,
 ) error {
 
-	lis, err := net.Listen("tcp", ":"+cfg.Server.GRPCPort)
+	lis, err := net.Listen("tcp", ":"+cfg.Server.AUTHGRPCPort)
 	if err != nil {
 		return err
 	}
