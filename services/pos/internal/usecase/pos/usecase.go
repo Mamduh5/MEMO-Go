@@ -8,8 +8,15 @@ type PosUsecase struct {
 	itemRepo  domain.OrderItemRepository
 }
 
-func NewPosUsecase(shiftRepo domain.ShiftRepository) *PosUsecase {
+func NewPosUsecase(
+	shiftRepo domain.ShiftRepository,
+	orderRepo domain.OrderRepository,
+	itemRepo domain.OrderItemRepository,
+
+) *PosUsecase {
 	return &PosUsecase{
 		shiftRepo: shiftRepo,
+		orderRepo: orderRepo,
+		itemRepo:  itemRepo,
 	}
 }

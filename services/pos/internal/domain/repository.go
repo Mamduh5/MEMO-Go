@@ -18,5 +18,5 @@ type OrderRepository interface {
 
 type OrderItemRepository interface {
 	Add(ctx context.Context, item *OrderItem) error
-	ListByOrderID(ctx context.Context, orderID string) ([]*OrderItem, error)
+	// ListByOrderID(ctx context.Context, orderID string) ([]*OrderItem, error)
 }

@@ -26,9 +26,12 @@ func NewApp() error {
 	}
 
 	shiftRepo := repoMysql.NewShiftRepository(db)
-
+	orderRepo := repoMysql.NewOrderRepository(db)
+	itemRepo := repoMysql.NewOrderItemRepository(db)
 	posUC := pos.NewPosUsecase(
 		shiftRepo,
+		orderRepo,
+		itemRepo,
 	)
 
 	return StartGRPCServer(cfg, posUC)
