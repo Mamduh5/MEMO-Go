@@ -3,6 +3,7 @@ package mysql
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	"memo-go/services/pos/internal/domain"
 )
@@ -55,4 +56,37 @@ func (r *OrderRepository) FindByID(
 	}
 
 	return &o, nil
+}
+
+func (r *OrderRepository) Close(
+	ctx context.Context,
+	orderID string,
+	total int64,
+	closedAt time.Time,
+) error {
+
+	res, err := r.db.ExecContext(
+		ctx,
+		`UPDATE orders
+		 SET status = ?, total = ?, closed_at = ?
+		 WHERE id = ? AND status = ?`,
+		domain.OrderStatusClosed,
+		total,
+		closedAt,
+		orderID,
+		domain.OrderStatusOpen,
+	)
+	if err != nil {
+		return err
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if affected == 0 {
+		return sql.ErrNoRows
+	}
+
+	return nil
 }

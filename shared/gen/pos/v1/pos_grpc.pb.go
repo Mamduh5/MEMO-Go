@@ -25,6 +25,7 @@ const (
 	PosService_CloseShift_FullMethodName   = "/pos.v1.PosService/CloseShift"
 	PosService_CreateOrder_FullMethodName  = "/pos.v1.PosService/CreateOrder"
 	PosService_AddOrderItem_FullMethodName = "/pos.v1.PosService/AddOrderItem"
+	PosService_CloseOrder_FullMethodName   = "/pos.v1.PosService/CloseOrder"
 )
 
 // PosServiceClient is the client API for PosService service.
@@ -37,6 +38,7 @@ type PosServiceClient interface {
 	CloseShift(ctx context.Context, in *CloseShiftRequest, opts ...grpc.CallOption) (*CloseShiftResponse, error)
 	CreateOrder(ctx context.Context, in *CreateOrderRequest, opts ...grpc.CallOption) (*CreateOrderResponse, error)
 	AddOrderItem(ctx context.Context, in *AddOrderItemRequest, opts ...grpc.CallOption) (*AddOrderItemResponse, error)
+	CloseOrder(ctx context.Context, in *CloseOrderRequest, opts ...grpc.CallOption) (*CloseOrderResponse, error)
 }
 
 type posServiceClient struct {
@@ -107,6 +109,16 @@ func (c *posServiceClient) AddOrderItem(ctx context.Context, in *AddOrderItemReq
 	return out, nil
 }
 
+func (c *posServiceClient) CloseOrder(ctx context.Context, in *CloseOrderRequest, opts ...grpc.CallOption) (*CloseOrderResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CloseOrderResponse)
+	err := c.cc.Invoke(ctx, PosService_CloseOrder_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PosServiceServer is the server API for PosService service.
 // All implementations must embed UnimplementedPosServiceServer
 // for forward compatibility.
@@ -117,6 +129,7 @@ type PosServiceServer interface {
 	CloseShift(context.Context, *CloseShiftRequest) (*CloseShiftResponse, error)
 	CreateOrder(context.Context, *CreateOrderRequest) (*CreateOrderResponse, error)
 	AddOrderItem(context.Context, *AddOrderItemRequest) (*AddOrderItemResponse, error)
+	CloseOrder(context.Context, *CloseOrderRequest) (*CloseOrderResponse, error)
 	mustEmbedUnimplementedPosServiceServer()
 }
 
@@ -144,6 +157,9 @@ func (UnimplementedPosServiceServer) CreateOrder(context.Context, *CreateOrderRe
 }
 func (UnimplementedPosServiceServer) AddOrderItem(context.Context, *AddOrderItemRequest) (*AddOrderItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddOrderItem not implemented")
+}
+func (UnimplementedPosServiceServer) CloseOrder(context.Context, *CloseOrderRequest) (*CloseOrderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CloseOrder not implemented")
 }
 func (UnimplementedPosServiceServer) mustEmbedUnimplementedPosServiceServer() {}
 func (UnimplementedPosServiceServer) testEmbeddedByValue()                    {}
@@ -274,6 +290,24 @@ func _PosService_AddOrderItem_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PosService_CloseOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CloseOrderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PosServiceServer).CloseOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PosService_CloseOrder_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PosServiceServer).CloseOrder(ctx, req.(*CloseOrderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PosService_ServiceDesc is the grpc.ServiceDesc for PosService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -304,6 +338,10 @@ var PosService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddOrderItem",
 			Handler:    _PosService_AddOrderItem_Handler,
+		},
+		{
+			MethodName: "CloseOrder",
+			Handler:    _PosService_CloseOrder_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

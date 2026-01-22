@@ -19,6 +19,8 @@ CREATE TABLE IF NOT EXISTS orders (
   shift_id VARCHAR(36) NOT NULL,
   status VARCHAR(20) NOT NULL,
   created_at DATETIME NOT NULL,
+  total BIGINT NOT NULL DEFAULT 0,
+  closed_at DATETIME NULL,
   INDEX idx_orders_shift (shift_id)
 );
 

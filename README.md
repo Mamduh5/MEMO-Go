@@ -24,6 +24,19 @@ MEMO-Go is for Memo application backend part using Golang
 
 ### Test register
 
+## How to run serviecs
+
+### Auth
+```sh
+  go run services\auth\cmd\authd\main.go
+```
+
+### Pos
+```sh
+  go run services\pos\cmd\posd\main.go
+```
+
+
 ```sh
 cd D:\Mamduh\Personal\MEMO-Go
 grpcurl -plaintext -d "{ \"email\": \"new@example.com\", \"password\": \"password123\" }" localhost:50051 auth.v1.AuthService/Register

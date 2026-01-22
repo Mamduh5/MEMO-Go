@@ -11,6 +11,7 @@ service PosService {
   rpc CloseShift(CloseShiftRequest) returns (CloseShiftResponse);
   rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
   rpc AddOrderItem(AddOrderItemRequest) returns (AddOrderItemResponse);
+  rpc CloseOrder(CloseOrderRequest) returns (CloseOrderResponse);
 }
 
 message PingRequest {}
@@ -49,3 +50,11 @@ message AddOrderItemRequest {
 }
 
 message AddOrderItemResponse {}
+
+message CloseOrderRequest {
+  string order_id = 1;
+}
+
+message CloseOrderResponse {
+  int64 total = 1;
+}

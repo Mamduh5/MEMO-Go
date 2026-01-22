@@ -14,5 +14,7 @@ type Order struct {
 	UserID    string
 	ShiftID   string
 	Status    OrderStatus
+	Total     int64 // cents
 	CreatedAt time.Time
+	ClosedAt  *time.Time
 }

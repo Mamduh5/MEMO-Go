@@ -10,3 +10,4 @@ var (
 	ErrInvalidQuantity = errors.New("invalid quantity")
 	ErrInvalidPrice    = errors.New("invalid price")
 )
+var ErrEmptyOrder = errors.New("order has no items")

@@ -14,9 +14,10 @@ type ShiftRepository interface {
 type OrderRepository interface {
 	Create(ctx context.Context, order *Order) error
 	FindByID(ctx context.Context, orderID string) (*Order, error)
+	Close(ctx context.Context, orderID string, total int64, closedAt time.Time) error
 }
 
 type OrderItemRepository interface {
 	Add(ctx context.Context, item *OrderItem) error
-	// ListByOrderID(ctx context.Context, orderID string) ([]*OrderItem, error)
+	ListByOrderID(ctx context.Context, orderID string) ([]*OrderItem, error)
 }

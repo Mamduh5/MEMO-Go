@@ -161,3 +161,30 @@ func (h *PosHandler) AddOrderItem(
 
 	return &posv1.AddOrderItemResponse{}, nil
 }
+
+func (h *PosHandler) CloseOrder(
+	ctx context.Context,
+	req *posv1.CloseOrderRequest,
+) (*posv1.CloseOrderResponse, error) {
+
+	_, ok := UserIDFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "missing user context")
+	}
+
+	total, err := h.uc.CloseOrder(ctx, req.OrderId)
+	if err != nil {
+		switch err {
+		case posuc.ErrOrderNotFound:
+			return nil, status.Error(codes.NotFound, err.Error())
+		case posuc.ErrOrderClosed, posuc.ErrEmptyOrder:
+			return nil, status.Error(codes.FailedPrecondition, err.Error())
+		default:
+			return nil, err
+		}
+	}
+
+	return &posv1.CloseOrderResponse{
+		Total: total,
+	}, nil
+}
